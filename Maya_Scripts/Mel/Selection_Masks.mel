@@ -1,0 +1,30 @@
+// Creates a pop-up window that allows you to choose between two different selection masks
+
+if (`window -exists AnimTools`) deleteUI AnimTools;
+window AnimTools;
+
+columnLayout ;
+
+button -w 150  -h 30 -l "Animation Mask" -c "AnimMask";
+separator -height 5 -style "in";
+button -w 150  -h 30 -l "Mesh Mask" -c "MeshMask";
+
+
+showWindow AnimTools;
+
+proc AnimMask (){
+    
+   selectMode -object; selectType -handle 0 -ikHandle 0 -joint 0 -nurbsCurve 1 -cos 1 -stroke 1 -nurbsSurface 0 -polymesh 0 -subdiv 0 -plane 0 -lattice 0 -cluster 0 -sculpt 0 -nonlinear 0 -particleShape 0 -emitter 0 -field 0 -spring 0 -rigidBody 0 -fluid 0 -hairSystem 0 -follicle 0 -nCloth 0 -nRigid 0 -dynamicConstraint 0 -rigidConstraint 0 -collisionModel 0 -light 0 -camera 0 -texture 0 -ikEndEffector 1 -locator 1 -dimension 1;selectType -byName gpuCache 0; ;
+    
+}
+
+proc MeshMask (){
+    
+    selectMode -object; selectType -handle 0 -ikHandle 0 -joint 0 -nurbsCurve 1 -cos 1 -stroke 1 -nurbsSurface 1 -polymesh 1 -subdiv 1 -plane 1 -lattice 0 -cluster 0 -sculpt 0 -nonlinear 0 -particleShape 0 -emitter 0 -field 0 -spring 0 -rigidBody 0 -fluid 0 -hairSystem 0 -follicle 0 -nCloth 0 -nRigid 0 -dynamicConstraint 0 -rigidConstraint 0 -collisionModel 0 -light 0 -camera 0 -texture 0 -ikEndEffector 1 -locator 1 -dimension 1;selectType -byName gpuCache 1; ;
+}
+
+// Animation mask options is the following :  
+// selectMode -object; selectType -handle 0 -ikHandle 0 -joint 0 -nurbsCurve 1 -cos 1 -stroke 1 -nurbsSurface 0 -polymesh 0 -subdiv 0 -plane 0 -lattice 0 -cluster 0 -sculpt 0 -nonlinear 0 -particleShape 0 -emitter 0 -field 0 -spring 0 -rigidBody 0 -fluid 0 -hairSystem 0 -follicle 0 -nCloth 0 -nRigid 0 -dynamicConstraint 0 -rigidConstraint 0 -collisionModel 0 -light 0 -camera 0 -texture 0 -ikEndEffector 1 -locator 1 -dimension 1;selectType -byName gpuCache 0; ;
+
+//Mesh mask options is the following:
+// selectMode -object; selectType -handle 0 -ikHandle 0 -joint 0 -nurbsCurve 1 -cos 1 -stroke 1 -nurbsSurface 1 -polymesh 1 -subdiv 1 -plane 1 -lattice 0 -cluster 0 -sculpt 0 -nonlinear 0 -particleShape 0 -emitter 0 -field 0 -spring 0 -rigidBody 0 -fluid 0 -hairSystem 0 -follicle 0 -nCloth 0 -nRigid 0 -dynamicConstraint 0 -rigidConstraint 0 -collisionModel 0 -light 0 -camera 0 -texture 0 -ikEndEffector 1 -locator 1 -dimension 1;selectType -byName gpuCache 1; ;

@@ -1,0 +1,174 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//                                     MR Clean                                                //                                                    
+//                                                                                             //
+//  Daniel's one stop shop for all your friequentely used animation cleanup task               //    
+//                                                                                             //   
+//  Follow these simple steps for your needs                                                   //   
+//     1. Select all the characters controls and run 'Apply Euler and Simplify Curve' button   //  
+//     2. Select Joint parent and run 'Select Hierarchy and Bake' button                       //   
+//     3. Select all constrained mesh objects and bake                                         //
+//     4. Select Joint parent and run 'Select Hierarchy and apply Euler and Simplify' button   //
+//     5. Select all unecessary geometry and delete                                            //
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+if (`window -exists Mr_Clean`) deleteUI Mr_Clean;
+window Mr_Clean;
+
+columnLayout ;
+
+button -w 210  -h 35 -l "Apply Euler and Simplify Curve" -c "EulerandSimplify";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Select Reference scale and bake" -c "ReferenceScale";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Import Worker" -c "ImportWorker";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Hips Anim Layer" -c "HipsAnimLayer";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "COG and feet Anim Layer" -c "FeetCOGAmimlayer";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Translate Feet & Hips" -c "TranslateHipsFeet";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Arms Anim Layer" -c "ArmsAnimLayer";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Select all joints" -c "JointSelect";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Select Hierarchy and Bake" -c "HierarchyandBake";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Bake Selected" -c "BakeSelected";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Select Hierarchy, Apply Euler and Reduce" -c "HierarchyandEuler";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Select Hierarchy and Delete" -c "HierarchyandDelete";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Animation Mask" -c "AnimMask";
+separator -height 5 -style "in";
+button -w 210  -h 35 -l "Mesh Mask" -c "MeshMask";
+
+
+showWindow Mr_Clean;
+
+//Makes panel dockable
+dockControl -area "right"
+	-content Mr_Clean
+	-allowedArea "left"
+	-allowedArea "right";
+	
+proc EulerandSimplify (){
+    
+// Run script to apply Euler curve filter to selected object and reduce keys
+
+    filterCurve -f Euler;
+    filterCurve -f keyReducer -selectedKeys -precisionMode 1 -precision 1;
+    
+}
+
+proc JointSelect (){
+    
+   SelectAllJoints;
+    
+}
+
+// Select reference and scale it down to 0.1
+proc ReferenceScale (){
+    
+   select -r Reference ;
+   setAttr "Reference.scaleZ" 0.1;
+   setAttr "Reference.scaleX" 0.1;
+   setAttr "Reference.scaleY" 0.1;
+   SelectHierarchy;
+   BakeSimulation; 
+}
+
+//Hips animation Layer
+proc HipsAnimLayer (){
+
+   select -r Hips ;
+   animLayer  AnimHips;
+// Result: AnimLayer1 // 
+   setAttr AnimHips.rotationAccumulationMode 0;
+   setAttr AnimHips.scaleAccumulationMode 1;
+   animLayer -e -addSelectedObjects AnimHips;
+}
+
+proc FeetCOGAmimlayer (){
+//Feet and Cog animation layer
+select -r RootX_M ;
+select -tgl IKLeg_R ;
+select -tgl IKLeg_L ;
+animLayer  AnimCOGFeet;
+// Result: AnimLayer1 // 
+setAttr AnimCOGFeet.rotationAccumulationMode 0;
+setAttr AnimCOGFeet.scaleAccumulationMode 1;
+animLayer -e -addSelectedObjects AnimCOGFeet; 
+}
+
+// Select reference and scale it down to 0.1
+proc ImportWorker (){
+    
+   file -import -type "mayaBinary"  -ignoreVersion -mergeNamespacesOnClash false -rpr "NatGrid_Worker_01_HIK" -options "v=0;"  -pr  -importTimeRange "combine" "X:/NationalGrid/CapitalProject/3D/scenes/2_Models/Character/HIK/NatGrid_Worker_01_HIK.mb"; 
+}
+
+proc HierarchyandBake (){
+    
+//Select Hierarchy and bake
+
+    SelectHierarchy;
+    BakeSimulation;
+}
+
+proc BakeSelected (){
+
+    BakeSimulation;
+}
+
+proc HierarchyandEuler (){
+    
+// Run script to select hierarchy and apply Euler curve filter to selected object and reduce keys
+    SelectHierarchy;
+    filterCurve -f Euler;
+    filterCurve -f keyReducer -selectedKeys -precisionMode 1 -precision 1;
+    
+}
+
+proc HierarchyandDelete (){
+    
+//Select Hierarchy and delete
+
+    SelectHierarchy;
+    Delete;
+}
+
+//Animation Mask that only allows curves selection
+proc AnimMask (){
+    
+   selectMode -object; selectType -handle 0 -ikHandle 0 -joint 0 -nurbsCurve 1 -cos 1 -stroke 1 -nurbsSurface 0 -polymesh 0 -subdiv 0 -plane 0 -lattice 0 -cluster 0 -sculpt 0 -nonlinear 0 -particleShape 0 -emitter 0 -field 0 -spring 0 -rigidBody 0 -fluid 0 -hairSystem 0 -follicle 0 -nCloth 0 -nRigid 0 -dynamicConstraint 0 -rigidConstraint 0 -collisionModel 0 -light 0 -camera 0 -texture 0 -ikEndEffector 1 -locator 1 -dimension 1;selectType -byName gpuCache 0; ;
+    
+}
+
+//Only allows geometry selection
+proc MeshMask (){
+    
+    selectMode -object; selectType -handle 0 -ikHandle 0 -joint 0 -nurbsCurve 1 -cos 1 -stroke 1 -nurbsSurface 1 -polymesh 1 -subdiv 1 -plane 1 -lattice 0 -cluster 0 -sculpt 0 -nonlinear 0 -particleShape 0 -emitter 0 -field 0 -spring 0 -rigidBody 0 -fluid 0 -hairSystem 0 -follicle 0 -nCloth 0 -nRigid 0 -dynamicConstraint 0 -rigidConstraint 0 -collisionModel 0 -light 0 -camera 0 -texture 0 -ikEndEffector 1 -locator 1 -dimension 1;selectType -byName gpuCache 1; ;
+}
+
+//Translates Feet down to the correct hieght
+proc TranslateHipsFeet (){
+	move -r 0 -0.861619 0 ;
+}
+
+//Creates Anim Layer for arms
+proc ArmsAnimLayer (){
+	select -r FKWrist_L ;
+	select -tgl FKElbow_L ;
+	select -tgl FKShoulder_L ;
+	select -tgl FKScapula_L ;
+	select -tgl FKScapula_R ;
+	select -tgl FKShoulder_R ;
+	select -tgl FKElbow_R ;
+	select -tgl FKWrist_R ;
+	animLayer  AnimLayer1;
+	setAttr AnimLayer1.rotationAccumulationMode 0;
+	setAttr AnimLayer1.scaleAccumulationMode 1;
+	animLayer -e -addSelectedObjects AnimLayer1;
+	rename AnimLayer1 Arms;
+}

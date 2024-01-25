@@ -1,0 +1,33 @@
+// Creates a popup window that gives you an option to bake selected objects, match transformations and constrain objects //
+
+if (`window -exists Baking`) deleteUI Baking;
+window Baking;
+
+columnLayout ;
+
+button -w 150  -h 30 -l "Bake Selected" -c "Bake";
+separator -height 5 -style "in";
+button -w 150  -h 30 -l "Match Transforms" -c "MatchTransformations";
+separator -height 5 -style "in";
+button -w 150  -h 30 -l "Constrian Object" -c "Constrain";
+
+
+showWindow Baking;
+
+proc Bake (){
+    
+   BakeSimulationOptions;
+    
+}
+
+proc MatchTransformations (){
+    
+    MatchTransform;
+}
+
+proc Constrain (){
+    
+    ParentConstraintOptions;
+}
+
+// This is usefull when you are preparing the character rig for the shots //
