@@ -1,0 +1,11 @@
+//Switch Perspective Cameras
+  $currentCamera = `lookThru -q`;
+  string $allCameras[];
+  $allCameras = `listCameras -p`;// This will select perspective cameras only
+  int $nextCamera;
+  for($pos=0;$pos<size($allCameras);$pos++)
+  {
+  if($currentCamera == $allCameras[$pos]) $nextCamera = $pos+1;
+  }
+  if($nextCamera>=size($allCameras)) $nextCamera = 0;
+  lookThru $allCameras[$nextCamera];
